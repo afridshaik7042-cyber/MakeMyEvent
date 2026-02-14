@@ -1,0 +1,96 @@
+openapi: 3.0.3
+info:
+  title: EasyEvents login/signup Api Documentation
+  description: Documents all the APIs involved in the login/signup service
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /auth/signup:
+    post:
+      summary: Register a new user
+      operationId: userSignUp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignInResponse'
+        '401':
+          description: Invalid credentials
+        '500':
+          description: Internal Server Error
+
+  /auth/login:
+    post:
+      summary: Login user
+      description: Authenticates user credentials and returns a JWT token.
+      operationId: userLogIn
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogInRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid Username or password
+        '500':
+          description: Internal Server Error
+
+components:
+  schemas:
+    SignInRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    SignInResponse:
+      type: object
+      properties:
+        statusCode:
+          type: string
+        message:
+          type: string
+
+    LogInRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIn0.signature
+        expireTime:
+          type: integer
+          example: 3500

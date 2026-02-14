@@ -1,0 +1,27 @@
+server:
+  port: 8081
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: INFO
+spring:
+ application:
+   name: Gateway
+
+ cloud:
+   gateway:
+     routes:
+       - id: auth-service
+         uri: http://localhost:8070
+         predicates:
+           - Path= /auth/**
+       - id: event-service
+         uri: http://localhost:8080
+         predicates:
+           - Path= /event/**
+ security:
+   oauth2:
+     resourceserver:
+       jwt:
+         secret: 9f3c2a1b4e8d7f9c6a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2
